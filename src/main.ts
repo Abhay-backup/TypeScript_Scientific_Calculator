@@ -34,14 +34,18 @@ function fe() {
         }
     }
 }
-
 function ms() {
     if(dis.value == '') {
+        
         marr.push(0);
+        localStorage.setItem("Calculator",JSON.stringify(marr));
     }
-    if(marr[marr.length-1] != parseFloat(dis.value)) {
+    else if(marr[marr.length-1] != parseFloat(dis.value)) {
         marr.push(parseFloat(dis.value));
+        localStorage.setItem("Calculator",JSON.stringify(marr));
     }
+    
+    
     (<HTMLInputElement>document.querySelector('#mc')!).disabled = false;
     (<HTMLInputElement>document.querySelector('#mr')!).disabled = false;
     (<HTMLInputElement>document.querySelector('#m')!).disabled = false;
@@ -49,8 +53,11 @@ function ms() {
 }
 
 function mr() {
-    dis.value = marr[marr.length-1].toString();
-    console.log(marr);
+    let memory =  JSON.parse(localStorage.getItem("Calculator")!);
+    if(dis.value != ""){
+    dis.value = memory[memory.length-1].toString();
+    }
+    localStorage.setItem("Calculator", JSON.stringify(memory));
 }
 
 function mc() {
@@ -59,35 +66,47 @@ function mc() {
     (<HTMLInputElement>document.querySelector('#mr')).disabled = true;
     (<HTMLInputElement>document.querySelector('#m')).disabled = true;
     console.log(marr);
+    localStorage.clear();
 }
 
 function mplus() {
-    marr[marr.length-1] += parseFloat(dis.value);
-    console.log(marr);
+    let memory =  JSON.parse(localStorage.getItem("Calculator")!);
+
+    if(dis.value != ""){
+        memory[memory.length-1] += parseFloat(dis.value);
+    }
+    localStorage.setItem("Calculator", JSON.stringify(memory));
 }
 
 function mminus() {
-    marr[marr.length-1] -= parseFloat(dis.value);
-    console.log(marr);
+    let memory =  JSON.parse(localStorage.getItem("Calculator")!);
+
+    if(dis.value != ""){
+        memory[memory.length-1] -= parseFloat(dis.value);
+    }
+    localStorage.setItem("Calculator", JSON.stringify(memory));
+    m();
 }
 
 function m() {
+    let memory =  JSON.parse(localStorage.getItem("Calculator")!);
     let html = "<table>";
-    for (var i = marr.length-1; i >= 0; i--) {
+    for (var i = memory.length-1; i >= 0; i--) {
         html+="<tr>";
-        html+="<td>"+marr[i]+"</td>";
+        html+="<td>"+memory[i]+"</td>";
         html+="</tr>";
     }
     html+="</table>";
     document.getElementById('memory')!.innerHTML = html;
+    localStorage.setItem("Calculator", JSON.stringify(memory));
 }
 
-document.getElementById("second")!.addEventListener("click", function(e) {
-    e.stopPropagation();
-});
-document.getElementById("second1")!.addEventListener("click", function(e) {
-    e.stopPropagation();
-});
+// document.getElementById("second")!.addEventListener("click", function(e) {
+//     e.stopPropagation();
+// });
+// document.getElementById("second1")!.addEventListener("click", function(e) {
+//     e.stopPropagation();
+// });
 
 //CE
 function dlt() {
@@ -215,6 +234,7 @@ function changeBtn() {
         document.getElementById('expo')!.innerHTML = 'x<sup>y</sup>';
         document.getElementById('tenpow')!.innerHTML = '10<sup>x</sup>';
         document.getElementById('log')!.innerHTML = 'log';
+        (<HTMLInputElement>document.getElementById('log')).disabled = false;
         document.getElementById('ln')!.innerHTML = 'ln';
         btnCount++;
     } else {
@@ -223,6 +243,7 @@ function changeBtn() {
         document.getElementById('expo')!.innerHTML = 'y&#x221A;x';
         document.getElementById('tenpow')!.innerHTML = '2<sup>x</sup>';
         document.getElementById('log')!.innerHTML = 'log<sub>y</sub>x';
+        (<HTMLInputElement>document.getElementById('log')).disabled = true;
         document.getElementById('ln')!.innerHTML = 'e<sup>x</sup>';
         btnCount++;
     }
