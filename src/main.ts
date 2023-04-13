@@ -35,26 +35,45 @@ function fe() {
     }
 }
 function ms() {
-    if(dis.value == '') {
-        
-        marr.push(0);
-        localStorage.setItem("Calculator",JSON.stringify(marr));
+    let memory =  JSON.parse(localStorage.getItem("Calculator")!);
+    if(dis.value == '' && memory==null) {
+        if(memory==null) {
+            
+            marr.push(0);
+            localStorage.setItem("Calculator", JSON.stringify(marr));
+        } else {
+            
+            memory.push(0);
+            localStorage.setItem("Calculator", JSON.stringify(memory));
+        }
+        // marr.push(0);
+        // localStorage.setItem("Calculator",JSON.stringify(marr));
     }
-    else if(marr[marr.length-1] != parseFloat(dis.value)) {
-        marr.push(parseFloat(dis.value));
-        localStorage.setItem("Calculator",JSON.stringify(marr));
+    else  {
+        // memory.push(parseFloat(dis.value));
+        // localStorage.setItem("Calculator",JSON.stringify(memory));
+        
+        if(memory!=null) {
+            memory.push(parseFloat(dis.value));
+            localStorage.setItem("Calculator", JSON.stringify(memory));
+        } else {
+            // let data1: number[] = [];
+            marr.push(parseFloat(dis.value));
+            localStorage.setItem("Calculator", JSON.stringify(marr));
+        }
+    
     }
     
     
     (<HTMLInputElement>document.querySelector('#mc')!).disabled = false;
     (<HTMLInputElement>document.querySelector('#mr')!).disabled = false;
     (<HTMLInputElement>document.querySelector('#m')!).disabled = false;
-    console.log(marr);
+   // console.log(marr);
 }
 
 function mr() {
     let memory =  JSON.parse(localStorage.getItem("Calculator")!);
-    if(dis.value != ""){
+    if(memory != null){
     dis.value = memory[memory.length-1].toString();
     }
     localStorage.setItem("Calculator", JSON.stringify(memory));
@@ -65,7 +84,7 @@ function mc() {
     (<HTMLInputElement> document.querySelector('#mc')).disabled = true;
     (<HTMLInputElement>document.querySelector('#mr')).disabled = true;
     (<HTMLInputElement>document.querySelector('#m')).disabled = true;
-    console.log(marr);
+    //console.log(marr);
     localStorage.clear();
 }
 
